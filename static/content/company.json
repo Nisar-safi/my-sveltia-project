@@ -1,16 +1,16 @@
 {
-  "name": "matrix site",
+  "name": "My Company",
   "logo": "/images/ChatGPT Image Aug 8, 2025, 10_22_10 PM.png",
-  "tagline": "services",
+  "tagline": "Building the future, one line of code at a time",
   "social": {
-    "facebook": "",
-    "twitter": "",
-    "instagram": "",
-    "linkedin": ""
+    "facebook": "https://facebook.com/mycompany",
+    "twitter": "https://twitter.com/mycompany",
+    "instagram": "https://instagram.com/mycompany",
+    "linkedin": "https://linkedin.com/company/mycompany"
   },
   "contact": {
-    "email": "nisarsafi2001@gmail.com",
-    "phone": "03444933428",
-    "address": "Check beli road Rawat Islamabad"
+    "email": "hello@mycompany.com",
+    "phone": "+1 (555) 123-4567",
+    "address": "123 Business Street, Suite 100\nCity, State 12345\nUnited States"
   }
 }

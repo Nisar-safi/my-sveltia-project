@@ -96,17 +96,120 @@
     <div class="content">
       {@html marked(page.body || 'Edit this text in the CMS at /admin →')}
     </div>
+
+    <!-- Contact & Social Section -->
+    {#if company.contact || company.social}
+      <div class="company-info">
+        <div class="info-grid">
+          {#if company.contact}
+            <div class="contact-section">
+              <h2>Contact Us</h2>
+              <div class="contact-details">
+                {#if company.contact.email}
+                  <div class="contact-item">
+                    <strong>Email:</strong>
+                    <a href="mailto:{company.contact.email}">{company.contact.email}</a>
+                  </div>
+                {/if}
+                {#if company.contact.phone}
+                  <div class="contact-item">
+                    <strong>Phone:</strong>
+                    <a href="tel:{company.contact.phone}">{company.contact.phone}</a>
+                  </div>
+                {/if}
+                {#if company.contact.address}
+                  <div class="contact-item">
+                    <strong>Address:</strong>
+                    <div class="address">{company.contact.address}</div>
+                  </div>
+                {/if}
+              </div>
+            </div>
+          {/if}
+
+          {#if company.social}
+            <div class="social-section">
+              <h2>Follow Us</h2>
+              <div class="social-links">
+                {#if company.social.facebook}
+                  <a href={company.social.facebook} target="_blank" rel="noopener" class="social-link">
+                    <span class="social-icon">📘</span>
+                    Facebook
+                  </a>
+                {/if}
+                {#if company.social.twitter}
+                  <a href={company.social.twitter} target="_blank" rel="noopener" class="social-link">
+                    <span class="social-icon">🐦</span>
+                    Twitter
+                  </a>
+                {/if}
+                {#if company.social.instagram}
+                  <a href={company.social.instagram} target="_blank" rel="noopener" class="social-link">
+                    <span class="social-icon">📷</span>
+                    Instagram
+                  </a>
+                {/if}
+                {#if company.social.linkedin}
+                  <a href={company.social.linkedin} target="_blank" rel="noopener" class="social-link">
+                    <span class="social-icon">💼</span>
+                    LinkedIn
+                  </a>
+                {/if}
+              </div>
+            </div>
+          {/if}
+        </div>
+      </div>
+    {/if}
   </div>
 </main>
 
 <footer>
   <div class="container">
     <div class="footer-content">
-      <div>
-        © {new Date().getFullYear()} {company.name || 'My Company'}. All rights reserved.
+      <div class="footer-info">
+        <div class="footer-logo">
+          {#if company.logo}
+            <img src={company.logo} alt={company.name} class="footer-logo-img" />
+          {/if}
+          <div>
+            <div class="company-name">{company.name || 'My Company'}</div>
+            {#if company.tagline}
+              <div class="company-tagline">{company.tagline}</div>
+            {/if}
+          </div>
+        </div>
+        
+        {#if company.social}
+          <div class="footer-social">
+            {#if company.social.facebook}
+              <a href={company.social.facebook} target="_blank" rel="noopener">📘</a>
+            {/if}
+            {#if company.social.twitter}
+              <a href={company.social.twitter} target="_blank" rel="noopener">🐦</a>
+            {/if}
+            {#if company.social.instagram}
+              <a href={company.social.instagram} target="_blank" rel="noopener">📷</a>
+            {/if}
+            {#if company.social.linkedin}
+              <a href={company.social.linkedin} target="_blank" rel="noopener">💼</a>
+            {/if}
+          </div>
+        {/if}
       </div>
-      <div>
-        Last updated: {browser ? new Date(lastUpdate).toLocaleTimeString() : '...'}
+      
+      <div class="footer-meta">
+        <div>
+          © {new Date().getFullYear()} {company.name || 'My Company'}. All rights reserved.
+        </div>
+        <div class="last-updated">
+          Last updated: {browser ? new Date(lastUpdate).toLocaleTimeString() : '...'}
+        </div>
+        {#if company.contact && company.contact.email}
+          <div class="footer-contact">
+            <a href="mailto:{company.contact.email}">{company.contact.email}</a>
+          </div>
+        {/if}
       </div>
     </div>
   </div>
@@ -243,7 +346,88 @@
     font-size: 1.2rem;
     line-height: 1.8;
     max-width: 800px;
+    margin: 0 auto 4rem auto;
+  }
+  
+  /* Company Info Section */
+  .company-info {
+    background: var(--bg-light);
+    padding: 3rem 2rem;
+    border-radius: 12px;
+    margin-top: 4rem;
+  }
+  
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    max-width: 800px;
     margin: 0 auto;
+  }
+  
+  .contact-section h2,
+  .social-section h2 {
+    margin-bottom: 1.5rem;
+    color: var(--text);
+  }
+  
+  .contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .contact-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .contact-item strong {
+    color: var(--text);
+  }
+  
+  .contact-item a {
+    color: var(--primary);
+    text-decoration: none;
+  }
+  
+  .contact-item a:hover {
+    text-decoration: underline;
+  }
+  
+  .address {
+    white-space: pre-line;
+    line-height: 1.5;
+  }
+  
+  .social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .social-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s;
+    border: 1px solid var(--border);
+  }
+  
+  .social-link:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+    color: var(--primary);
+  }
+  
+  .social-icon {
+    font-size: 1.25rem;
   }
   
   /* Footer */
@@ -259,7 +443,70 @@
   .footer-content {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  .footer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .footer-logo {
+    display: flex;
     align-items: center;
+    gap: 1rem;
+  }
+  
+  .footer-logo-img {
+    height: 40px;
+  }
+  
+  .company-name {
+    font-weight: 600;
+    color: var(--text);
+  }
+  
+  .company-tagline {
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+  }
+  
+  .footer-social {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .footer-social a {
+    display: inline-block;
+    padding: 0.5rem;
+    background: var(--bg);
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: all 0.2s;
+  }
+  
+  .footer-social a:hover {
+    transform: translateY(-2px);
+    background: var(--primary);
+    color: white;
+  }
+  
+  .footer-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: right;
+  }
+  
+  .footer-contact a {
+    color: var(--primary);
+    text-decoration: none;
+  }
+  
+  .footer-contact a:hover {
+    text-decoration: underline;
   }
   
   /* Responsive Design */
@@ -297,10 +544,23 @@
       font-size: 1.3rem;
     }
     
+    .info-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    
     .footer-content {
       flex-direction: column;
-      gap: 1rem;
+      gap: 2rem;
       text-align: center;
+    }
+    
+    .footer-meta {
+      text-align: center;
+    }
+    
+    .footer-logo {
+      justify-content: center;
     }
   }
 </style>
