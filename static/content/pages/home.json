@@ -15,7 +15,8 @@
       },
       {
         "text": "Services",
-        "href": "/services"
+        "href": "/services",
+        "active": false
       },
       {
         "text": "Portfolio",
@@ -24,6 +25,11 @@
       {
         "text": "Contact",
         "href": "/contact"
+      },
+      {
+        "text": "Expire",
+        "href": "/products",
+        "active": true
       }
     ]
   }
