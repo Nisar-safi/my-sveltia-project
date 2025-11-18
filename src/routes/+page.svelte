@@ -26,7 +26,7 @@
 
   // Only run in the browser
   onMount(() => {
-    load();                    /
+    load();                    
     const interval = setInterval(load); 
     return () => clearInterval(interval);     
   });
