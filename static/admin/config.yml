@@ -3,9 +3,6 @@ backend:
   repo: Nisar-safi/my-sveltia-project
   branch: main
 
-
-
-
 media_folder: "static/images"
 public_folder: "/images"
 
@@ -21,6 +18,17 @@ collections:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Hero Image", name: "hero", widget: "image" }
       - { label: "Body", name: "body", widget: "markdown" }
+      - label: "Navigation"
+        name: "navbar"
+        widget: "object"
+        fields:
+          - label: "Navigation Links"
+            name: "links"
+            widget: "list"
+            fields:
+              - { label: "Link Text", name: "text", widget: "string" }
+              - { label: "URL", name: "href", widget: "string" }
+              - { label: "Is Active", name: "active", widget: "boolean", required: false, default: false }
 
   - name: settings
     label: Site Settings
@@ -32,3 +40,57 @@ collections:
           - { label: "Company Name", name: "name", widget: "string" }
           - { label: "Logo", name: "logo", widget: "image" }
           - { label: "Tagline", name: "tagline", widget: "string" }
+          - label: "Social Media"
+            name: "social"
+            widget: "object"
+            required: false
+            fields:
+              - { label: "Facebook", name: "facebook", widget: "string", required: false }
+              - { label: "Twitter", name: "twitter", widget: "string", required: false }
+              - { label: "Instagram", name: "instagram", widget: "string", required: false }
+              - { label: "LinkedIn", name: "linkedin", widget: "string", required: false }
+          - label: "Contact Information"
+            name: "contact"
+            widget: "object"
+            required: false
+            fields:
+              - { label: "Email", name: "email", widget: "string", required: false }
+              - { label: "Phone", name: "phone", widget: "string", required: false }
+              - { label: "Address", name: "address", widget: "text", required: false }
+
+  - name: "navigation"
+    label: "Global Navigation"
+    files:
+      - label: "Main Navigation"
+        name: "main-nav"
+        file: "static/content/navigation.json"
+        fields:
+          - label: "Navigation Items"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "Label", name: "label", widget: "string" }
+              - { label: "URL", name: "url", widget: "string" }
+              - { label: "Order", name: "order", widget: "number", value_type: "int", default: 0 }
+
+  - name: "site_config"
+    label: "Site Configuration"
+    files:
+      - label: "Site Settings"
+        name: "site"
+        file: "static/content/site-config.json"
+        fields:
+          - label: "Appearance"
+            name: "appearance"
+            widget: "object"
+            fields:
+              - { label: "Primary Color", name: "primary_color", widget: "color", default: "#3b82f6" }
+              - { label: "Secondary Color", name: "secondary_color", widget: "color", default: "#6b7280" }
+              - { label: "Font Family", name: "font_family", widget: "string", default: "system-ui" }
+          - label: "SEO"
+            name: "seo"
+            widget: "object"
+            fields:
+              - { label: "Meta Description", name: "description", widget: "text" }
+              - { label: "Keywords", name: "keywords", widget: "list" }
+              - { label: "Favicon", name: "favicon", widget: "image", required: false }
