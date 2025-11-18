@@ -1,0 +1,34 @@
+backend:
+  name: github
+  repo: Nisar-safi/my-sveltia-project
+  branch: main
+
+
+
+
+media_folder: "static/images"
+public_folder: "/images"
+
+collections:
+  - name: pages
+    label: Pages
+    folder: "static/content/pages"
+    create: true
+    extension: json
+    format: json                     
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Hero Image", name: "hero", widget: "image" }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: settings
+    label: Site Settings
+    files:
+      - label: "Company"
+        name: "company"
+        file: "static/content/company.json"
+        fields:
+          - { label: "Company Name", name: "name", widget: "string" }
+          - { label: "Logo", name: "logo", widget: "image" }
+          - { label: "Tagline", name: "tagline", widget: "string" }
