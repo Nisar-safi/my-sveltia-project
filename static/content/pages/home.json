@@ -32,5 +32,15 @@
         "active": false
       }
     ]
+  },
+  "carousel": {
+    "title": "Software  Services",
+    "cards": [
+      {
+        "image": "/images/ChatGPT Image Aug 12, 2025, 12_48_20 PM.png",
+        "title": "Web Development",
+        "description": "Custom websites and web applications built with modern technologies."
+      }
+    ]
   }
 }
