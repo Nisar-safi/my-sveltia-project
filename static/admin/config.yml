@@ -29,6 +29,22 @@ collections:
               - { label: "Link Text", name: "text", widget: "string" }
               - { label: "URL", name: "href", widget: "string" }
               - { label: "Is Active", name: "active", widget: "boolean", required: false, default: false }
+      - label: "Carousel Cards"
+        name: "carousel"
+        widget: "object"
+        required: false
+        fields:
+          - label: "Carousel Title"
+            name: "title"
+            widget: "string"
+            required: false
+          - label: "Cards"
+            name: "cards"
+            widget: "list"
+            fields:
+              - { label: "Card Image", name: "image", widget: "image" }
+              - { label: "Card Title", name: "title", widget: "string" }
+              - { label: "Card Description", name: "description", widget: "text" }
 
   - name: settings
     label: Site Settings

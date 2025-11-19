@@ -8,6 +8,8 @@
   let company = $state({});
   let lastUpdate =$state(0);
   let mobileMenuOpen =$state(false);
+   let currentSlide = $state(1); // Start with middle card focused
+  let carouselItems = $state([]);
 
   function toggleMobileMenu() {
     mobileMenuOpen = !mobileMenuOpen;
@@ -16,6 +18,24 @@
   function closeMobileMenu() {
     mobileMenuOpen = false;
   }
+
+  function nextSlide() {
+    if (page.carousel && page.carousel.cards) {
+      currentSlide = (currentSlide + 1) % page.carousel.cards.length;
+    }
+  }
+
+  function prevSlide() {
+    if (page.carousel && page.carousel.cards) {
+      currentSlide = (currentSlide - 1 + page.carousel.cards.length) % page.carousel.cards.length;
+    }
+  }
+
+  // Auto-rotate carousel every 5 seconds
+  onMount(() => {
+    const interval = setInterval(nextSlide, 5000);
+    return () => clearInterval(interval);
+  });
 
   async function load() {
     if (!browser) return; 
@@ -28,16 +48,20 @@
       ]);
       if (p.ok) page = await p.json();
       if (c.ok) company = await c.json();
+      
+      // Initialize carousel items
+      if (page.carousel && page.carousel.cards) {
+        carouselItems = page.carousel.cards;
+      }
     } catch (e) {
       console.error('Fetch failed:', e);
     }
     lastUpdate = Date.now();
   }
 
-  // Only run in the browser
   onMount(() => {
     load();                    
-    const interval = setInterval(load, 30000); 
+    const interval = setInterval(load, 30000);
     return () => clearInterval(interval);     
   });
 </script>
@@ -56,7 +80,7 @@
         {company.name || 'My Company'}
       </a>
       
-      <button class="mobile-menu-btn" onclick={toggleMobileMenu}>
+      <button class="mobile-menu-btn" on:click={toggleMobileMenu}>
         ☰
       </button>
       
@@ -67,7 +91,7 @@
               <a 
                 href={link.href} 
                 class="nav-link {link.active ? 'active' : ''}"
-                onclick={closeMobileMenu}
+                on:click={closeMobileMenu}
               >
                 {link.text}
               </a>
@@ -96,6 +120,57 @@
     <div class="content">
       {@html marked(page.body || 'Edit this text in the CMS at /admin →')}
     </div>
+
+    <!-- Carousel Section -->
+    {#if page.carousel && page.carousel.cards && page.carousel.cards.length > 0}
+      <section class="carousel-section">
+        {#if page.carousel.title}
+          <h2 class="carousel-title">{page.carousel.title}</h2>
+        {/if}
+        
+        <div class="carousel-container">
+          <button class="carousel-btn carousel-btn-prev" on:click={prevSlide}>
+            <span>‹</span>
+          </button>
+          
+          <div class="carousel">
+            <div class="carousel-track">
+              {#each page.carousel.cards as card, index}
+                <div 
+                  class="carousel-card"
+                  class:active={index === currentSlide}
+                  class:prev={index === (currentSlide - 1 + page.carousel.cards.length) % page.carousel.cards.length}
+                  class:next={index === (currentSlide + 1) % page.carousel.cards.length}
+                >
+                  <div class="card-image">
+                    <img src={card.image} alt={card.title} />
+                  </div>
+                  <div class="card-content">
+                    <h3 class="card-title">{card.title}</h3>
+                    <p class="card-description">{card.description}</p>
+                  </div>
+                </div>
+              {/each}
+            </div>
+          </div>
+          
+          <button class="carousel-btn carousel-btn-next" on:click={nextSlide}>
+            <span>›</span>
+          </button>
+        </div>
+        
+        <div class="carousel-dots">
+          {#each page.carousel.cards as _, index}
+            <button 
+              class="carousel-dot {index === currentSlide ? 'active' : ''}"
+              on:click={() => currentSlide = index}
+            >
+              <span class="sr-only">Go to slide {index + 1}</span>
+            </button>
+          {/each}
+        </div>
+      </section>
+    {/if}
 
     <!-- Contact & Social Section -->
     {#if company.contact || company.social}
@@ -225,6 +300,7 @@
     --bg-light: #f9fafb;
     --border: #e5e7eb;
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
   
   .container {
@@ -233,7 +309,7 @@
     padding: 0 1.5rem;
   }
   
-  
+  /* Header & Navigation - existing styles remain the same */
   header {
     background-color: var(--bg);
     box-shadow: var(--shadow);
@@ -349,7 +425,174 @@
     margin: 0 auto 4rem auto;
   }
   
-  /* Company Info Section */
+  /* Carousel Styles */
+  .carousel-section {
+    margin: 6rem 0 4rem 0;
+    padding: 2rem 0;
+  }
+  
+  .carousel-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: var(--text);
+  }
+  
+  .carousel-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .carousel {
+    overflow: hidden;
+    width: 100%;
+    max-width: 1000px;
+  }
+  
+  .carousel-track {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    transition: transform 0.5s ease-in-out;
+    padding: 2rem 0;
+  }
+  
+  .carousel-card {
+    flex: 0 0 300px;
+    background: var(--bg);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: all 0.5s ease-in-out;
+    opacity: 0.6;
+    transform: scale(0.9);
+  }
+  
+  .carousel-card.active {
+    opacity: 1;
+    transform: scale(1.1);
+    box-shadow: var(--shadow-lg);
+    z-index: 10;
+  }
+  
+  .carousel-card.prev,
+  .carousel-card.next {
+    opacity: 0.8;
+    transform: scale(0.95);
+  }
+  
+  .card-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+  }
+  
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .carousel-card.active .card-image img {
+    transform: scale(1.05);
+  }
+  
+  .card-content {
+    padding: 1.5rem;
+  }
+  
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--text);
+  }
+  
+  .card-description {
+    color: var(--text-light);
+    line-height: 1.6;
+    margin: 0;
+  }
+  
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 20;
+    font-size: 1.5rem;
+    color: var(--text);
+  }
+  
+  .carousel-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-50%) scale(1.1);
+  }
+  
+  .carousel-btn-prev {
+    left: 0;
+  }
+  
+  .carousel-btn-next {
+    right: 0;
+  }
+  
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+  
+  .carousel-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    background: var(--border);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .carousel-dot.active {
+    background: var(--primary);
+    transform: scale(1.2);
+  }
+  
+  .carousel-dot:hover {
+    background: var(--primary-dark);
+  }
+  
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  /* Company Info Section - existing styles remain the same */
   .company-info {
     background: var(--bg-light);
     padding: 3rem 2rem;
@@ -544,6 +787,28 @@
       font-size: 1.3rem;
     }
     
+    .carousel-title {
+      font-size: 2rem;
+    }
+    
+    .carousel-card {
+      flex: 0 0 250px;
+    }
+    
+    .carousel-btn {
+      width: 40px;
+      height: 40px;
+      font-size: 1.25rem;
+    }
+    
+    .carousel-btn-prev {
+      left: -10px;
+    }
+    
+    .carousel-btn-next {
+      right: -10px;
+    }
+    
     .info-grid {
       grid-template-columns: 1fr;
       gap: 2rem;
@@ -561,6 +826,24 @@
     
     .footer-logo {
       justify-content: center;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .carousel-card {
+      flex: 0 0 200px;
+    }
+    
+    .card-image {
+      height: 150px;
+    }
+    
+    .card-content {
+      padding: 1rem;
+    }
+    
+    .card-title {
+      font-size: 1.25rem;
     }
   }
 </style>
