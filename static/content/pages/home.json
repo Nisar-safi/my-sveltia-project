@@ -15,7 +15,8 @@
       },
       {
         "text": "Services",
-        "href": "/services"
+        "href": "/services",
+        "active": false
       },
       {
         "text": "Portfolio",
@@ -24,36 +25,11 @@
       {
         "text": "Contact",
         "href": "/contact"
-      }
-    ]
-  },
-  "carousel": {
-    "title": "Featured Services",
-    "cards": [
-      {
-        "image": "/images/service1.jpg",
-        "title": "Web Development",
-        "description": "Custom websites and web applications built with modern technologies and best practices."
       },
       {
-        "image": "/images/service2.jpg",
-        "title": "UI/UX Design",
-        "description": "Beautiful and intuitive user interfaces that provide exceptional user experiences."
-      },
-      {
-        "image": "/images/service3.jpg",
-        "title": "Digital Marketing",
-        "description": "Comprehensive digital marketing strategies to grow your online presence and reach."
-      },
-      {
-        "image": "/images/service4.jpg",
-        "title": "Consulting",
-        "description": "Expert advice and strategic planning to help your business achieve its goals."
-      },
-      {
-        "image": "/images/service5.jpg",
-        "title": "Support & Maintenance",
-        "description": "Ongoing support and maintenance to keep your systems running smoothly."
+        "text": "Expire",
+        "href": "/products",
+        "active": false
       }
     ]
   }
