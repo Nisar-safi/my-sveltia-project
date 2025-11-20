@@ -1,0 +1,15 @@
+{
+  "title": "Our Proven Process",
+  "description": "Four clear steps that turn your vision into reality — with transparency and excellence at every stage.",
+  "cta": {
+    "text": "Start Your Project",
+    "link": "/contact"
+  },
+  "steps": [
+    {
+      "icon": "💡",
+      "title": "Support & Maintenance",
+      "description": "We provide continuous support and maintenance to keep your solution running optimally.\""
+    }
+  ]
+}
